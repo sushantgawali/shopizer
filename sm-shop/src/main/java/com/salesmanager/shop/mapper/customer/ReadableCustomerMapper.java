@@ -1,9 +1,16 @@
 package com.salesmanager.shop.mapper.customer;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+import com.salesmanager.core.business.services.customer.CustomerAddressService;
 import com.salesmanager.core.model.customer.Customer;
+import com.salesmanager.core.model.customer.CustomerAddress;
 import com.salesmanager.core.model.customer.attribute.CustomerAttribute;
 import com.salesmanager.core.model.merchant.MerchantStore;
 import com.salesmanager.core.model.reference.language.Language;
@@ -11,15 +18,20 @@ import com.salesmanager.core.model.user.Group;
 import com.salesmanager.shop.mapper.Mapper;
 import com.salesmanager.shop.model.customer.ReadableCustomer;
 import com.salesmanager.shop.model.customer.address.Address;
+import com.salesmanager.shop.model.customer.address.ReadableCustomerAddress;
 import com.salesmanager.shop.model.customer.attribute.CustomerOptionDescription;
 import com.salesmanager.shop.model.customer.attribute.CustomerOptionValueDescription;
 import com.salesmanager.shop.model.customer.attribute.ReadableCustomerAttribute;
 import com.salesmanager.shop.model.customer.attribute.ReadableCustomerOption;
 import com.salesmanager.shop.model.customer.attribute.ReadableCustomerOptionValue;
 import com.salesmanager.shop.model.security.ReadableGroup;
+import com.salesmanager.shop.populator.customer.ReadableCustomerAddressPopulator;
 
 @Component
 public class ReadableCustomerMapper implements Mapper<Customer, ReadableCustomer> {
+
+	@Inject
+	private CustomerAddressService customerAddressService;
 
 	@Override
 	public ReadableCustomer convert(Customer source, MerchantStore store, Language language) {
@@ -108,6 +120,25 @@ public class ReadableCustomerMapper implements Mapper<Customer, ReadableCustomer
 			target.setDelivery(address);
 		} else {
 			target.setDelivery(target.getBilling());
+		}
+
+		if (source.getId() != null) {
+			List<CustomerAddress> addressEntities =
+					customerAddressService.getByCustomerIdAndStore(source.getId(), store);
+			if (!addressEntities.isEmpty()) {
+				ReadableCustomerAddressPopulator populator = new ReadableCustomerAddressPopulator();
+				List<ReadableCustomerAddress> readableAddresses = addressEntities.stream()
+						.map(a -> {
+							try {
+								return populator.populate(a, store, language);
+							} catch (Exception e) {
+								return null;
+							}
+						})
+						.filter(a -> a != null)
+						.collect(Collectors.toList());
+				target.setAddresses(readableAddresses);
+			}
 		}
 
 		if(source.getAttributes()!=null) {
