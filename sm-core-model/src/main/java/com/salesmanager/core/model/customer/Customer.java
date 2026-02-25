@@ -69,6 +69,9 @@ public class Customer extends SalesManagerEntity<Long, Customer> implements Audi
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customer")
 	private Set<CustomerAttribute> attributes = new HashSet<CustomerAttribute>();
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customer", orphanRemoval = true)
+	private List<CustomerAddress> addresses = new ArrayList<CustomerAddress>();
 	
 	@Column(name="CUSTOMER_GENDER", length=1, nullable=true)
 	@Enumerated(value = EnumType.STRING)
@@ -354,5 +357,13 @@ public class Customer extends SalesManagerEntity<Long, Customer> implements Audi
 	public void setCredentialsResetRequest(CredentialsReset credentialsResetRequest) {
 		this.credentialsResetRequest = credentialsResetRequest;
 	}
-	
+
+	public List<CustomerAddress> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(List<CustomerAddress> addresses) {
+		this.addresses = addresses;
+	}
+
 }
