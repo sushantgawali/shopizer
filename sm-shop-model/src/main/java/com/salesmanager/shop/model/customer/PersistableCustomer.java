@@ -1,6 +1,7 @@
 package com.salesmanager.shop.model.customer;
 
 import java.util.List;
+import com.salesmanager.shop.model.customer.address.PersistableCustomerAddress;
 import com.salesmanager.shop.model.customer.attribute.PersistableCustomerAttribute;
 import com.salesmanager.shop.model.security.PersistableGroup;
 import io.swagger.annotations.ApiModel;
@@ -20,6 +21,7 @@ public class PersistableCustomer extends CustomerEntity {
 	private static final long serialVersionUID = 1L;
 	private List<PersistableCustomerAttribute> attributes;
 	private List<PersistableGroup> groups;
+	private List<PersistableCustomerAddress> addresses;
 	
 	
 	public void setAttributes(List<PersistableCustomerAttribute> attributes) {
@@ -47,6 +49,12 @@ public class PersistableCustomer extends CustomerEntity {
 	public void setRepeatPassword(String repeatPassword) {
 		this.repeatPassword = repeatPassword;
 	}
-	
+
+	public List<PersistableCustomerAddress> getAddresses() {
+		return addresses;
+	}
+	public void setAddresses(List<PersistableCustomerAddress> addresses) {
+		this.addresses = addresses;
+	}
 
 }
