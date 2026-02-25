@@ -1,0 +1,3 @@
+src/
+!target/shopizer.jar
+*.md

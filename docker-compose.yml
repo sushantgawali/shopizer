@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  shopizer-db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: SALESMANAGER
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-ppassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  shopizer:
+    build:
+      context: ./sm-shop
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      JAVA_OPTS: >-
+        -Dspring.profiles.active=mysql
+        -Ddb.jdbcUrl=jdbc:mysql://shopizer-db:3306/SALESMANAGER?autoReconnect=true&serverTimeZone=UTC&useUnicode=true&characterEncoding=UTF-8
+        -Ddb.user=root
+        -Ddb.password=password
+        -Dsearch.noindex=true
+    depends_on:
+      shopizer-db:
+        condition: service_healthy
+    restart: on-failure
