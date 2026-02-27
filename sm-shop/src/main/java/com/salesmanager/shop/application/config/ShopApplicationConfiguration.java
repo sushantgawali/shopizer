@@ -93,7 +93,7 @@ public class ShopApplicationConfiguration implements WebMvcConfigurer {
      **/
 
     registry
-        .addInterceptor(corsFilter())
+        .addInterceptor(corsMvcInterceptor())
         // public services cors filter
         .addPathPatterns("/services/**")
         // REST api
@@ -121,7 +121,7 @@ public class ShopApplicationConfiguration implements WebMvcConfigurer {
 	 */
 
   @Bean
-  public CorsFilter corsFilter() {
+  public CorsFilter corsMvcInterceptor() {
     return new CorsFilter();
   }
 
