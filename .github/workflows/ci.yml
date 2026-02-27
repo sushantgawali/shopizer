@@ -24,7 +24,7 @@ jobs:
         run: ./mvnw -B package -Dmaven.javadoc.skip=true -Dexcludes='**/*IntegrationTest.java'
 
       - name: Integration tests
-        run: ./mvnw -B test -pl sm-shop -am -Dtest='*IntegrationTest' -Dmaven.javadoc.skip=true
+        run: ./mvnw -B test -pl sm-shop -am -Dtest='*IntegrationTest' -DfailIfNoTests=false -Dmaven.javadoc.skip=true
 
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
