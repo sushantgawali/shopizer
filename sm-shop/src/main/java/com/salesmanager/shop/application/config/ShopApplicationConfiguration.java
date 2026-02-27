@@ -9,10 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -93,7 +89,7 @@ public class ShopApplicationConfiguration implements WebMvcConfigurer {
      **/
 
     registry
-        .addInterceptor(corsMvcInterceptor())
+        .addInterceptor(corsFilter())
         // public services cors filter
         .addPathPatterns("/services/**")
         // REST api
@@ -121,20 +117,8 @@ public class ShopApplicationConfiguration implements WebMvcConfigurer {
 	 */
 
   @Bean
-  public CorsFilter corsMvcInterceptor() {
+  public CorsFilter corsFilter() {
     return new CorsFilter();
-  }
-
-  @Bean
-  public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-    configuration.setAllowedHeaders(Arrays.asList("X-Auth-Token", "Content-Type", "Authorization", "Cache-Control", "X-Requested-With"));
-    configuration.setAllowCredentials(true);
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-    return source;
   }
 
 

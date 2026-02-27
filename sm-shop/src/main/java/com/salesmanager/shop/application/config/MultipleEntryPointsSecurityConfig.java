@@ -116,8 +116,7 @@ public class MultipleEntryPointsSecurityConfig {
 		protected void configure(HttpSecurity http) throws Exception {
 			http
 			.antMatcher("/shop/**")
-			.cors().and()
-			.csrf().disable()
+			.csrf().disable()			
 			.authorizeRequests()
 					.antMatchers("/shop/").permitAll()
 					.antMatchers("/shop/**").permitAll()
@@ -183,7 +182,6 @@ public class MultipleEntryPointsSecurityConfig {
 		protected void configure(HttpSecurity http) throws Exception {
 			http
 			.antMatcher("/services/**")
-			.cors().and()
 			.csrf().disable()
 					.authorizeRequests()
 					.antMatchers("/services/public/**").permitAll()
@@ -327,7 +325,6 @@ public class MultipleEntryPointsSecurityConfig {
 		protected void configure(HttpSecurity http) throws Exception {
 			http
 					.antMatcher(API_VERSION + "/private/**")
-					.cors().and()
 					.authorizeRequests()
 					.antMatchers(API_VERSION + "/private/login*").permitAll()
 					.antMatchers(API_VERSION + "/private/refresh").permitAll()
@@ -396,7 +393,6 @@ public class MultipleEntryPointsSecurityConfig {
 			http
 			
 				.antMatcher(API_VERSION + "/auth/**")
-				.cors().and()
 				.authorizeRequests()
 					.antMatchers(API_VERSION + "/auth/refresh").permitAll()
 					.antMatchers(API_VERSION + "/auth/login").permitAll()
